@@ -70,10 +70,10 @@
   \item[14:05-14:30] Part 1. The circle
   \item[14:35-15:00] Part 2. The universal cover of the circle
   \item[15:05-15:30] Part 3. Homotopical constructions of types
-  \item[15:35-16:00] Exercise session
-  \item[16:05-16:30] Part 4. Homotopy groups of types
-  \item[16:35-17:00] Part 5. The real projective spaces
-  \item[17:00-17:30] Break
+  \item[15:35-16:15] Exercise session
+  \item[16:20-16:45] Part 4. Homotopy groups of types
+  \item[16:50-17:15] Part 5. The real projective spaces
+  \item[17:15-17:30] Break
   \item[17:30-18:30] Lecture by Paige North on Directed type theory
   \end{description}
 \end{frame}
@@ -112,6 +112,9 @@
     \baseS & : \sphere{1} \\
     \loopS & : \baseS=\baseS
   \end{align*}
+  \begin{center}
+    \includegraphics[width=.3\textwidth]{circle}
+  \end{center}
 \end{frame}
 
 \begin{frame}
@@ -167,11 +170,18 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{The geometry behind the induction principle of $\sphere{1}$}
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{circle-induction}
+  \end{center}
+\end{frame}
+
+\begin{frame}
   \frametitle{Here's how to use the dependent universal property of $\sphere{1}$}
   Suppose we have
   \begin{align*}
     u & : \apply{P}{\baseS} \\
-    p & : \apply{\tr_P}{p,u}=u.
+    p & : \apply{\tr_P}{\loopS,u}=u.
   \end{align*}
   Then there is a unique function $f:\prod_{(x:\sphere{1})}\apply{P}{x}$ equipped with\pause
   \begin{itemize}
@@ -204,7 +214,12 @@
 
 \begin{frame}
   \frametitle{Here's how to use the universal property of $\sphere{1}$}
-  For any $y:Y$ equipped with $q:y=y$, there is a unique map $f:\sphere{1}\to Y$ equipped with
+  For any
+  \begin{align*}
+    y & : Y \\
+    q & : y = y
+  \end{align*}
+  there is a unique map $f:\sphere{1}\to Y$ equipped with
   \begin{itemize}
   \item an identification $\alpha:\apply{f}{\baseS}=y$
   \item an identification $\beta$ witnessing that the square

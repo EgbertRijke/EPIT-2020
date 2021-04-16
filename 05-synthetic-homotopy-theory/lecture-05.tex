@@ -56,11 +56,16 @@
 \newcommand{\apply}[2]{#1(#2)}
 \newcommand{\equiveq}{\mathsf{equiv\usc{}eq}}
 \newcommand{\succZ}{\mathsf{succ}}
-\newcommand{\bool}{\mathsf{bool}}
+\newcommand{\bool}{\mathbf{2}}
 \newcommand{\const}{\mathsf{const}}
 \newcommand{\btrue}{\mathsf{true}}
 \newcommand{\bfalse}{\mathsf{false}}
 \newcommand{\ttt}{\mathsf{pt}}
+\newcommand{\iscontr}{\mathsf{is\usc{}contr}}
+\newcommand{\inr}{\mathsf{inr}}
+\newcommand{\inl}{\mathsf{inl}}
+\newcommand{\fib}{\mathsf{fib}}
+\newcommand{\RP}[1]{\mathbb{R}\mathsf{P}^{#1}}
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]{}
@@ -69,6 +74,273 @@
 
 \begin{frame}
   \maketitle
+\end{frame}
+
+\begin{frame}
+  \huge{Part 1. The type of 2-element types}
+\end{frame}
+
+\begin{frame}
+  \begin{definition}
+    The type of 2-element types is defined to be
+    \begin{equation*}
+      \UU_\bool :=\sum_{(X:\UU)}\brck{\bool\simeq X}
+    \end{equation*}
+  \end{definition}
+
+  \begin{theorem}
+    The type
+    \begin{equation*}
+      \sum_{(X:\UU_\bool)}X
+    \end{equation*}
+    of pointed 2-element types is contractible.
+  \end{theorem}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proof}
+  The center of contraction is $(\bool,\eta(\refl),\btrue)$. Our goal is therefore to construct the contraction
+  \begin{equation*}
+    \prod_{(X:\UU)}\prod_{(p:\brck{\bool\simeq x})}\prod_{(x:X)}(\bool,\eta(\refl),\btrue)=(X,p,x).
+  \end{equation*}
+  We will show something slightly stronger, namely that
+  \begin{equation*}
+    \prod_{(X:\UU)}\prod_{(p:\brck{\bool\simeq x})}\prod_{(x:X)}\iscontr((\bool,\btrue)=(X,x)).
+  \end{equation*}
+  This is a proposition, so it suffices to show that
+    \begin{equation*}
+    \prod_{(X:\UU)}\prod_{(p:\bool\simeq x)}\prod_{(x:X)}\iscontr((\bool,\btrue)=(X,x)).
+  \end{equation*}
+  By univalence, it suffices to show that
+  \begin{equation*}
+    \prod_{(x:\bool)}\iscontr((\bool,\btrue)=(\bool,x)).
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proof (cont).}
+  Furthermore, by univalence it follows that the type $(X,x)=(Y,y)$ is equivalent to the type
+  \begin{equation*}
+    ((X,x)\simeq_\ast(Y,y)):=\sum_{(e:X\simeq Y)}e(x)=y
+  \end{equation*}
+  of base-point preserving equivalences from $X$ to $Y$.\\[\baselineskip]
+
+  In other words, we have to show that for any $x:\bool$, there is a unique equivalence
+  \begin{equation*}
+    e:\bool\simeq\bool
+  \end{equation*}
+  such that $e(\btrue)=x$. This follows from the fact that the map
+  \begin{equation*}
+    ev:(\bool\simeq\bool)\to\bool
+  \end{equation*}
+  given by $e\mapsto e(\btrue)$ is an equivalence.\hfill$\square$
+\end{frame}
+
+\begin{frame}
+  \begin{corollary}
+    For any $2$-element type $X$, we have an equivalence
+    \begin{equation*}
+      (\bool=X)\simeq X.
+    \end{equation*}
+  \end{corollary}
+  \begin{proof}
+    By the fundamental theorem of identity types.
+  \end{proof}
+\end{frame}
+
+\begin{frame}
+  \begin{definition}
+    A \textbf{line bundle} over a type $A$ is a map $A\to\UU_\bool$. 
+  \end{definition}
+  \begin{corollary}
+    For any line bundle $B$ over $A$, the square
+    \begin{equation*}
+      \begin{tikzcd}[ampersand replacement=\&]
+        \sum_{(x:A)}B(x) \arrow[d,swap,"\pi_1"] \arrow[r] \& \unit \arrow[d] \\
+        A \arrow[r,swap,"B"] \& \UU_{\bool}
+      \end{tikzcd}
+    \end{equation*}
+    is a pullback square.\footnote{We also say that $\unit\to\UU_{\bool}$ is the \textbf{universal line bundle}.}
+  \end{corollary}
+\end{frame}
+
+\begin{frame}
+  \huge{Part 2. The construction of the real projective spaces}
+\end{frame}
+
+\begin{frame}
+  Classically, $\RP{n}$ is constructed out of $\sphere{n}$ by identifying antipodal pairs of points.\\[\baselineskip]\pause
+
+  This implies that each $\RP{n}$ fits in a fiber sequence
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&]
+      \bool \arrow[r] \& \sphere{n} \arrow[r] \& \RP{n}
+    \end{tikzcd}
+  \end{equation*}
+  Our goal is to construct such fiber sequences in HoTT.
+\end{frame}
+
+\begin{frame}
+  \frametitle{The descent theorem}
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&,row sep=small]
+      \& S' \arrow[dl] \arrow[dr] \arrow[d] \\
+      A' \arrow[d] \& S \arrow[dl] \arrow[dr] \& B' \arrow[dl,crossing over] \arrow[d] \\
+      A \arrow[dr] \& X' \arrow[from=ul,crossing over] \arrow[d] \& B \arrow[dl] \\
+      \& X
+    \end{tikzcd}
+  \end{equation*}
+  Suppse the two squares in the back are pullback squares. The following are equivalent:
+  \begin{enumerate}
+  \item The two squares in the front are pullback squares.
+  \item The square
+    \begin{equation*}
+      \begin{tikzcd}[ampersand replacement=\&,row sep=1.5em]
+        A'\sqcup^{S'}B' \arrow[r] \arrow[d] \& X' \arrow[d] \\
+        A\sqcup^{S}B \arrow[r] \& X
+      \end{tikzcd}
+    \end{equation*}
+    is a pullback square.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The fiberwise join of two maps}
+  Consider two maps $f:A\to X$ and $g:B\to X$. Then we can
+  \begin{itemize}
+  \item First take the pullback of $f$ and $g$.
+  \item Then take the pushout of that pullback.
+  \end{itemize}
+
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&]
+      \phantom{A\times_X B} \arrow[d,phantom,swap,"\phantom{\pi_1}"] \arrow[r,phantom,"\phantom{\pi_2}"] \& B \arrow[d,phantom,"\phantom{\inr}"] \arrow[ddr,bend left=15,"g"] \\
+      A \arrow[r,phantom,"\phantom{\inl}"] \arrow[drr,bend right=15,swap,"f"] \& \phantom{A\ast_X B} \arrow[dr,phantom,"\phantom{f\ast g}" description] \\
+      \& \& X
+    \end{tikzcd}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The fiberwise join of two maps}
+  Consider two maps $f:A\to X$ and $g:B\to X$. Then we can
+  \begin{itemize}
+  \item First take the pullback of $f$ and $g$.
+  \item Then take the pushout of that pullback.
+  \end{itemize}
+
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&]
+      A\times_X B \arrow[d,swap,"\pi_1"] \arrow[r,"\pi_2"] \& B \arrow[d,phantom,"\phantom{\inr}"] \arrow[ddr,bend left=15,"g"] \\
+      A \arrow[r,phantom,"\phantom{\inl}"] \arrow[drr,bend right=15,swap,"f"] \& \phantom{A\ast_X B} \arrow[dr,phantom,"\phantom{f\ast g}" description] \\
+      \& \& X
+    \end{tikzcd}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The fiberwise join of two maps}
+  Consider two maps $f:A\to X$ and $g:B\to X$. Then we can
+  \begin{itemize}
+  \item First take the pullback of $f$ and $g$.
+  \item Then take the pushout of that pullback.
+  \end{itemize}
+
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&]
+      A\times_X B \arrow[d,swap,"\pi_1"] \arrow[r,"\pi_2"] \& B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
+      A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"f"] \& A\ast_X B \arrow[dr,dotted,"f\ast g" description] \\
+      \& \& X
+    \end{tikzcd}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \begin{theorem}
+    For any $x:X$, we have an equivalence
+    \begin{equation*}
+      \fib_{f\ast g}(x)\simeq \fib_f(x)\ast\fib_g(x)
+    \end{equation*}
+  \end{theorem}
+
+  \begin{proof}
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&]
+      \& \fib_f(x)\times\fib_g(x) \arrow[dl] \arrow[dr] \arrow[d] \\
+      \fib_f(x) \arrow[d] \& A\times_X B \arrow[dl] \arrow[dr] \& \fib_g(x) \arrow[dl,crossing over] \arrow[d] \\
+      A \arrow[dr] \& \unit \arrow[from=ul,crossing over] \arrow[d] \& B \arrow[dl] \\
+      \& X
+    \end{tikzcd}
+  \end{equation*}
+  All the squares in this cube are pullback squares.\\[10em]    
+  \end{proof}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proof (cont)}
+  By the descent theorem it therefore follows that the square
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&]
+      \fib_f(x)\ast\fib_g(x) \arrow[d] \arrow[r] \& \unit \arrow[d,"x"] \\
+      A\ast_X B \arrow[r,swap,"f\ast g"] \& X
+    \end{tikzcd}
+  \end{equation*}
+  is a pullback square. In other words, the fiber of $f\ast g$ at $x$ is $\fib_f(x)\ast\fib_g(x)$.\hfill$\square$
+\end{frame}
+
+\begin{frame}
+  \begin{definition}
+    We define $\RP{n}$ equipped with maps
+    \begin{equation*}
+      \gamma_n:\RP{n}\to\UU_\bool
+    \end{equation*}
+    recursively by
+    \begin{itemize}
+    \item $\RP{0}:=\unit$ and $\gamma_0:\RP{0}\to\UU_\bool$ the base point inclusion, and
+    \item $\RP{n+1}:= \RP{n}\ast_{\UU_\bool}\unit$ and $\gamma_{n+1}:=\gamma_n\ast\gamma_0$. 
+    \end{itemize}
+  \end{definition}
+\end{frame}
+
+\begin{frame}
+  \phantom{s}\\[3em]
+  \begin{theorem}
+    For each $n:\N$, we have an equivalence
+    \begin{equation*}
+      \Big(\sum_{(x:\RP{n})}\gamma_n(x)\Big)\simeq \sphere{n}.
+    \end{equation*}
+  \end{theorem}
+
+  \begin{proof}
+    First, note that we have equivalences
+    \begin{equation*}
+      \fib_{\gamma_{n+1}}(\bool)\simeq \fib_{\gamma_n}(\bool)\ast \bool
+    \end{equation*}
+    it follows by recursion that
+    \begin{equation*}
+      \fib_{\gamma_n}(\bool)\simeq \sphere{n}.
+    \end{equation*}
+    \\[10em]
+  \end{proof}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proof (cont)}
+      Furthermore, by the fact that $\unit\to\UU_\bool$ is the universal line bundle, we have a fiber sequence
+    \begin{equation*}
+      \begin{tikzcd}[ampersand replacement=\&]
+        \sum_{(x:\RP{n}}\gamma_n(x) \arrow[r] \& \RP{n} \arrow[r,"\gamma_n"] \& \UU_{\bool}
+      \end{tikzcd}
+    \end{equation*}
+    Therefore we obtain that
+    \begin{equation*}
+      \Big(\sum_{X:\RP{n}}\gamma_n(x)\Big)\simeq\sphere{n}.
+    \end{equation*}
+    {}\hfill$\square$
+
+    \begin{corollary}
+      We have a fiber sequence $\bool\to\sphere{n}\to\RP{n}$ for each $n:\N$.
+    \end{corollary}
 \end{frame}
 
 \end{document}
